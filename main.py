@@ -18,8 +18,9 @@ import os
 
 # Configuration initiale
 CONFIG_FILE = 'bot_config.json'
-TOKEN = 'BOT_TELEGRAM'  # Remplacez par votre token
-ADMIN_IDS = [123456789]  # Remplacez par vos IDs admin
+TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_IDS = [int(id) for id in os.getenv('ADMIN_IDS', '').split(',') if id]  
+# Remplacez par votre token
 
 # Configuration du logging
 logging.basicConfig(
