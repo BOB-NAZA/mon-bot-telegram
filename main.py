@@ -65,17 +65,25 @@ class PublicationBot:
         return user_id in ADMIN_IDS
     
     def load_config(self):
-        """Charge la configuration depuis le fichier JSON"""
-        if os.path.exists(CONFIG_FILE):
+    """Charge la configuration depuis le fichier JSON"""
+    default_config = {
+        "groupes": [],
+        "publications": [],
+        "programmation": {}
+    }
+    
+    try:
+        # Vérifie si le fichier existe et n'est pas vide
+        if os.path.exists(CONFIG_FILE) and os.path.getsize(CONFIG_FILE) > 0:
             with open(CONFIG_FILE, 'r') as f:
                 self.config = json.load(f)
         else:
-            self.config = {
-                "groupes": [],
-                "publications": [],
-                "programmation": {}
-            }
+            self.config = default_config
             self.save_config()
+    except json.JSONDecodeError:
+        # Si le fichier est corrompu, on le réinitialise
+        self.config = default_config
+        self.save_config()
     
     def save_config(self):
         """Sauvegarde la configuration dans le fichier JSON"""
